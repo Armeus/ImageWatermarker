@@ -1,8 +1,10 @@
+# Imports
 import tkinter as tk
 from tkinter import filedialog, messagebox
 from PIL import Image, ImageTk, ImageOps
 
 
+# Prompts user to select initial image and updates GUI for next step
 def image_select():
     try:
         # On button click will prompt user to select an image file
@@ -18,6 +20,7 @@ def image_select():
         tk.messagebox.showerror(title='Error', message='No File Selected')
 
 
+# Prompts user to select watermark template and updates GUI for final step
 def wm_select(updated_image):
     try:
         # Only allow .pngs due to watermark needing to have transparency
@@ -50,7 +53,6 @@ def save_image(output_image):
         tk.messagebox.showerror(title='Error', message='File Not Found')
 
 
-
 # Reverts GUI to initial state, allowing user to start from beginning
 def go_back():
     im_label.config(image='')
@@ -72,7 +74,7 @@ wm_label = tk.Label(text="Upload an Image", font=("Ariel", 24, "bold"), backgrou
 wm_label.pack()
 wm_label.config(padx=20, pady=20)
 
-# Create initial buttons to select file
+# Create buttons used
 next_button = tk.Button(window, text='Select File', command=image_select,
                    width=10, height=2, background='light grey')
 next_button.pack()
