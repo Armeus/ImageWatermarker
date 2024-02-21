@@ -1,29 +1,35 @@
 import tkinter as tk
-from tkinter import filedialog, PhotoImage
+from tkinter import filedialog, messagebox
 from PIL import Image, ImageTk, ImageOps
 
 
 def image_select():
-    # On button click will prompt user to select an image file
-    filename = filedialog.askopenfilename(filetypes=[('image files', '.png .jpg')])
-    starting_image = Image.open(filename)
-    # Once file is selected it will update the GUI to show the selected image
-    update_thumbnail(starting_image)
-    # Update label and buttons to next step
-    wm_label.config(text='Choose your Watermark')
-    back_button.pack()
-    next_button.config(command=lambda: wm_select(starting_image))
+    try:
+        # On button click will prompt user to select an image file
+        filename = filedialog.askopenfilename(filetypes=[('image files', '.png .jpg')])
+        starting_image = Image.open(filename)
+        # Once file is selected it will update the GUI to show the selected image
+        update_thumbnail(starting_image)
+        # Update label and buttons to next step
+        wm_label.config(text='Choose your Watermark')
+        back_button.pack()
+        next_button.config(command=lambda: wm_select(starting_image))
+    except AttributeError:
+        tk.messagebox.showerror(title='Error', message='No File Selected')
 
 
 def wm_select(updated_image):
-    # Only allow .pngs due to watermark needing to have transparency
-    filename = filedialog.askopenfilename(filetypes=[('image files', '.png')])
-    wm_im = ImageOps.contain(Image.open(filename), updated_image.size)
-    updated_image.paste(wm_im, (0, 0), wm_im)
-    update_thumbnail(updated_image)
-    # Update label and buttons to prompt user to save updated image
-    wm_label.config(text='Image Watermarked!')
-    next_button.config(text='Save Image', command=lambda: save_image(updated_image))
+    try:
+        # Only allow .pngs due to watermark needing to have transparency
+        filename = filedialog.askopenfilename(filetypes=[('image files', '.png')])
+        wm_im = ImageOps.contain(Image.open(filename), updated_image.size)
+        updated_image.paste(wm_im, (0, 0), wm_im)
+        update_thumbnail(updated_image)
+        # Update label and buttons to prompt user to save updated image
+        wm_label.config(text='Image Watermarked!')
+        next_button.config(text='Save Image', command=lambda: save_image(updated_image))
+    except AttributeError:
+        tk.messagebox.showerror(title='Error', message='No File Selected')
 
 
 # Updates label with current image thumbnail
@@ -36,8 +42,13 @@ def update_thumbnail(image):
 
 # Prompts user to save image as
 def save_image(output_image):
-    filename = filedialog.asksaveasfilename(defaultextension='.png', filetypes=[('image files', '.png .jpg'), ('all files', '*.*')])
-    output_image.save(filename, format='PNG')
+    try:
+        filename = filedialog.asksaveasfilename(defaultextension='.png',
+                                                filetypes=[('image files', '.png .jpg'), ('all files', '*.*')])
+        output_image.save(filename, format='PNG')
+    except FileNotFoundError:
+        tk.messagebox.showerror(title='Error', message='File Not Found')
+
 
 
 # Reverts GUI to initial state, allowing user to start from beginning
