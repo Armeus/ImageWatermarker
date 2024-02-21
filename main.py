@@ -33,8 +33,9 @@ def update_thumbnail(image):
     im_label.img = photo
 
 
+# Prompts user to save image as
 def save_image(output_image):
-    filename = filedialog.asksaveasfilename(initialfile='.png', filetypes=[('image files', '.png .jpg'), ('all files', '*.*')])
+    filename = filedialog.asksaveasfilename(defaultextension='.png', filetypes=[('image files', '.png .jpg'), ('all files', '*.*')])
     output_image.save(filename, format='PNG')
 
 
