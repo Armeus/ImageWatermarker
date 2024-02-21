@@ -11,7 +11,8 @@ def image_select():
     update_thumbnail(starting_image)
     # Update label and buttons to next step
     wm_label.config(text='Choose your Watermark')
-    button.config(command=lambda: wm_select(starting_image))
+    back_button.pack()
+    next_button.config(command=lambda: wm_select(starting_image))
 
 
 def wm_select(updated_image):
@@ -22,7 +23,7 @@ def wm_select(updated_image):
     update_thumbnail(updated_image)
     # Update label and buttons to prompt user to save updated image
     wm_label.config(text='Image Watermarked!')
-    button.config(text='Save Image', command=lambda: save_image(updated_image))
+    next_button.config(text='Save Image', command=lambda: save_image(updated_image))
 
 
 # Updates label with current image thumbnail
@@ -39,6 +40,14 @@ def save_image(output_image):
     output_image.save(filename, format='PNG')
 
 
+# Reverts GUI to initial state, allowing user to start from beginning
+def go_back():
+    im_label.config(image='')
+    wm_label.config(text='Upload an Image')
+    next_button.config(text='Select File', command=image_select)
+    back_button.pack_forget()
+
+
 # Initialize GUI with using Tkinter
 window = tk.Tk()
 window.title("Image Watermarker")
@@ -52,9 +61,10 @@ wm_label = tk.Label(text="Upload an Image", font=("Ariel", 24, "bold"), backgrou
 wm_label.pack()
 wm_label.config(padx=20, pady=20)
 
-# Create initial button to select file
-button = tk.Button(window, text='Select File', command=image_select,
+# Create initial buttons to select file
+next_button = tk.Button(window, text='Select File', command=image_select,
                    width=10, height=2, background='light grey')
-button.pack()
+next_button.pack()
+back_button = tk.Button(window, text='Go Back', command=go_back, width=10, height=2, background='light grey')
 
 window.mainloop()
